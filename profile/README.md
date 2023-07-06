@@ -1,1 +1,5 @@
-Mupen64 rewrite (M64RPFW), m64p rerecording and TASInput 
+Ongoing projects:
+
+- M64RPFW
+- mupen64-plus-rr core
+- mupen64-plus-rr TASInput (TinCan)
