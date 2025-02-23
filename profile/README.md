@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="512" align="center" src="https://github.com/user-attachments/assets/c0666e58-f792-4cd8-9083-ac82512b1281">
+  <img width="128" align="center" src="https://github.com/mkdasher/mupen64-rr-lua-/assets/48759429/45351707-be77-4daf-987c-0bdb712891ab">
 </p>
 
 <h1 align="center">
