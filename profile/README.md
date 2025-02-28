@@ -17,7 +17,7 @@
 - mupen64-plus-rr core
 - mupen64-plus-rr TASInput (TinCan)
 - SM64Lua Redux
-- AziAudio Legacy
 - TASInput
 - hacktarux-azimer-rsp-hle
 - better-gln64
+- better-azi
