@@ -17,3 +17,4 @@
 - <img width="32" align="center" src="https://github.com/user-attachments/assets/e3402adb-ed62-4ad9-a1c5-2a36f4ebcf61"> better-azi
 - TinCan
 - mupen-rsp
+- no-plugins
