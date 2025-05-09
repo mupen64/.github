@@ -13,7 +13,7 @@
 ## Plugins
 
 - <img width="32" align="center" src="https://github.com/user-attachments/assets/e75961d7-926d-47a0-81c9-0962c86747eb"> TASInput
-- <img width="32" align="center" src="https://github.com/user-attachments/assets/37af0514-3f4e-42ff-b7d6-ea7ad6fc368f"> better-gln64
+- <img width="32" align="center" src="https://github.com/user-attachments/assets/37af0514-3f4e-42ff-b7d6-ea7ad6fc368f"> bettergln
 - <img width="32" align="center" src="https://github.com/user-attachments/assets/e3402adb-ed62-4ad9-a1c5-2a36f4ebcf61"> better-azi
 - TinCan
 - mupen-rsp
