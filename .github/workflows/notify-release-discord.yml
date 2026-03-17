@@ -1,0 +1,35 @@
+name: Notify Discord on release
+
+on: 
+  workflow_call: {}
+
+jobs:
+  send-to-discord:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Discord payload
+        env:
+          REPO_NAME:    ${{ github.event.repository.name }}
+          TAG_NAME:     ${{ github.event.release.tag_name }}
+          RELEASE_URL:  ${{ github.event.release.html_url }}
+          RELEASE_BODY: ${{ github.event.release.body || 'No description provided.' }}
+        run: |
+          jq -n \
+            --arg repo "$REPO_NAME" \
+            --arg tag  "$TAG_NAME" \
+            --arg body "$RELEASE_BODY" \
+            --arg url  "$RELEASE_URL" \
+            '{content: "# \($repo) \($tag)\n\n\($body)\n\n\($url)"}' \
+            > payload.json
+
+      - name: Send to Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "${DISCORD_WEBHOOK_URL:-}" ]; then
+            echo "DISCORD_WEBHOOK_URL secret is missing or empty"; exit 1;
+          fi
+          curl -X POST -H 'Content-Type: application/json' \
+               --data-binary @payload.json \
+               "$DISCORD_WEBHOOK_URL"
