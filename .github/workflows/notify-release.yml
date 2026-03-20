@@ -1,4 +1,4 @@
-name: Notify Discord on release
+name: Notify on release
 
 on: 
   workflow_call: {}
