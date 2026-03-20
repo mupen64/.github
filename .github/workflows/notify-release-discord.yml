@@ -3,6 +3,9 @@ name: Notify Discord on release
 on: 
   workflow_call: {}
 
+permissions:
+  contents: read
+
 jobs:
   send-to-discord:
     runs-on: ubuntu-latest
