@@ -1,0 +1,69 @@
+name: Sync source folder
+
+on:
+  workflow_call:
+    inputs:
+      repo:
+        required: true
+        type: string
+      branch:
+        required: true
+        type: string
+      folder:
+        required: true
+        type: string
+      state_file:
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repack
+        uses: actions/checkout@v4
+
+      - name: Get latest commit SHA
+        id: latest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          SHA=$(gh api repos/${{ inputs.repo }}/commits/${{ inputs.branch }} -q .sha)
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Check stored state
+        id: state
+        run: |
+          STORED=$(cat "${{ inputs.state_file }}" 2>/dev/null || echo "none")
+          echo "stored=$STORED" >> "$GITHUB_OUTPUT"
+
+      - name: Download and replace folder
+        if: steps.latest.outputs.sha != steps.state.outputs.stored
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SHA: ${{ steps.latest.outputs.sha }}
+        run: |
+          curl -L \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/repos/${{ inputs.repo }}/zipball/$SHA" \
+            -o source.zip
+          rm -rf "${{ inputs.folder }}"
+          unzip -q source.zip -d _extracted
+          EXTRACTED_DIR=$(ls _extracted/)
+          mv "_extracted/$EXTRACTED_DIR" "${{ inputs.folder }}"
+          rm -rf _extracted source.zip
+
+      - name: Commit and push
+        if: steps.latest.outputs.sha != steps.state.outputs.stored
+        env:
+          SHA: ${{ steps.latest.outputs.sha }}
+        run: |
+          echo "$SHA" > "${{ inputs.state_file }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "${{ inputs.folder }}" "${{ inputs.state_file }}"
+          git diff --staged --quiet || git commit -m "chore: sync ${{ inputs.folder }} from ${{ inputs.repo }}@${SHA:0:7}"
+          git push
